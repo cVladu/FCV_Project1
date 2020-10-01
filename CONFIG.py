@@ -19,7 +19,7 @@ CONFIG_DICT = {
     }
 }
 
-TEST = True
+TEST = False
 
 img_name_format = '{name}_{augmentation}_{index}{ext}'
 
