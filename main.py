@@ -6,7 +6,7 @@ from augmentations import apply_function
 
 #TODO: Create git repository [SOLVED]
 
-#TODO: Implement tkinter interface
+#TODO: Implement tkinter interface [SOLVED]
 
 #TODO: Implement tint function [SOLVED]
 
