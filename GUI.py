@@ -1,10 +1,18 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
+import traceback
 from main import run_main
+
 
 dir_path_inp = ''
 dir_path_out = ''
 config_file_path = ''
+
+
+def show_error(*args):
+    err = args[2]
+    messagebox.showerror('Error', err)
 
 
 def create_handle_browse(button_type, label):
@@ -90,5 +98,7 @@ def init_gui():
 
 
 if __name__ == '__main__':
+    tk.Tk.report_callback_exception = show_error
     main_window = init_gui()
     main_window.mainloop()
+
