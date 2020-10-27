@@ -45,4 +45,3 @@ FUNC_MAPPING = {
 TEST = False
 
 img_name_format = '{name}_{augmentation}_{index}{ext}'
-

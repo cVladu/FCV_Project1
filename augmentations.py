@@ -111,8 +111,11 @@ def linear_point_processing(image, alpha=1, beta=0):
 
 def gamma_correction(image, gamma):
     min_value, max_value = _get_min_max(image)
+    if gamma <= 0:
+        raise Exception("For function gamma_correction, gamma must be higher than 0")
     inv_gamma = 1. / gamma
-    table = np.array([((i / 255.) ** inv_gamma) * 255 for i in np.arange(min_value, max_value+1)]).astype(image.dtype)
+    table = np.array([((i / float(max_value)) ** inv_gamma) * max_value
+                      for i in np.arange(min_value, max_value+1)]).astype(image.dtype)
     result = cv2.LUT(image, table)
     return result
 
@@ -129,6 +132,7 @@ def lookup_table(image, lut=None, blue=None, green=None, red=None):
             raise Exception("Provide a lookup table of 256 entries for each channel")
     else:
         raise Exception("Either lut or all blue, green, red parameters must be given.")
+    image = image.astype('uint8')
     result = cv2.LUT(image, lut)
     return result
 

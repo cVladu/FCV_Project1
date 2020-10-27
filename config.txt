@@ -1,4 +1,0 @@
-Rotation 15
-Tint red 50
-Tint green 30
-Tint blue 40

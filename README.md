@@ -74,7 +74,7 @@ Apply the following formula:
 `g(i, j) = alpha * f(i, j) + beta`,  
 where g(i, j) represents the new pixel value, at location (i, j)  
 and f(i, j) represents the initial value at the same pixel position.  
-**func**: [point_process, linear, point]  
+**func:** [point_process, linear, point]  
 **params:** 
 * alpha:
     - **Optional.** Default value: 1.0
@@ -87,4 +87,36 @@ and f(i, j) represents the initial value at the same pixel position.
     negative values. For very lage values, 
     the result image will be saturated to the maximum value, 
     dependent on the input image type.
+### Gamma correction
+Apply a gamma correct to the image.  
+**func:** [gamma, gamma_correction]  
+**params:**
+* gamma:
+    - **Mandatory**
+    - Specify the gamma in the following formula: g(x) = [f(x)]^<sup>(1/gamma)</sup>
+    - Accepted range: [0, inf]. Value must be higher than 0. Undefined behavior for very large values.
+### Look up table
+Apply a transformation based on the given look up table. 
+The image will be transformed in a image with pixel values 
+in range [0, 255]
+**func:** [lut, lookup, lookup_table]  
+**params:**
+* lut:
+    - **Optional**
+    - Specify the look-up table for all the image channels
+    - Accepted: a list with exactly 256 elements. Elements higher than 255 will be saturated. Floating points values will be converted. Undefined behavior for negative values
+* blue:
+    - **Optional**
+    - Specify the look-up table for the blue channel
+    - Accepted: a list with exactly 256 elements. Elements higher than 255 will be saturated. Floating points values will be converted. Undefined behavior for negative values
+* green
+    - **Optional**
+    - Specify the look-up table for the green channel
+    - Accepted: a list with exactly 256 elements. Elements higher than 255 will be saturated. Floating points values will be converted. Undefined behavior for negative values
+* red:
+    - **Optional**
+    - Specify the look-up table for the red channel
+    - Accepted: a list with exactly 256 elements. Elements higher than 255 will be saturated. Floating points values will be converted. Undefined behavior for negative values  
+    
+***Either lut or all blue green red parameters must be provided.***   
 
