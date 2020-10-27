@@ -64,6 +64,8 @@ def tint_image(image, value, channel=None, mask=None):
         raise Exception("Either channel or mask must be given.")
     beta = value/100. if value > 1 else value
     alpha = 1. - beta
+    if alpha < 0 or alpha > 1:
+        raise Exception("For tint_image, value must be between 0 and 100.")
     cv2.addWeighted(image, alpha, img_mask, beta, 0.0, result)
     return result
 
@@ -86,11 +88,15 @@ def hist(image, img_type="bgr"):
 
 
 def increase_brightness(image, beta):
+    if beta < 0:
+        raise Exception("For function increase_brightness, beta must be higher than 0.")
     result = linear_point_processing(image, beta=beta)
     return result
 
 
 def modify_contrast(image, alpha):
+    if 0 > alpha:
+        raise Exception("For modify_contrast, alpha must be higher than 0 ")
     result = linear_point_processing(image, alpha=alpha)
     return result
 
@@ -172,6 +178,21 @@ def closing(image, iterations, kernel=None, kernel_type=None, kernel_size=None, 
     if transform_binary:
         _, image = cv2.threshold(cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
     result = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel, iterations=iterations)
+    return result
+
+
+def translation(image, x_pixels, y_pixels):
+    if x_pixels < 1.:
+        x_pixels = image.shape[0] * x_pixels
+    if y_pixels < 1.:
+        y_pixels = image.shape[1] * y_pixels
+    result = cv2.warpAffine(image, np.asarray([[1, 0, x_pixels], [0, 1, y_pixels]]), image.shape[1::-1])
+    return result
+
+
+def scale(image, x_factor, y_factor):
+    result = cv2.warpAffine(image, np.asarray([[x_factor, 0, 0], [0, y_factor, 0]]),
+                            (int(image.shape[1] * x_factor), int(image.shape[0] * y_factor)))
     return result
 
 

@@ -25,6 +25,8 @@ def run_main(inp_dir, out_dir, config_file, index_start, recursive=False):
             except KeyError:
                 enable = True
             if enable:
+                if not func_dict['params']:
+                    func_dict['params'] = {}
                 result_img = apply_function(img, func_dict['func'], **func_dict['params'])
                 format_dict = {'name': os.path.split(name_path)[1],
                                'augmentation': str_format,

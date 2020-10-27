@@ -17,8 +17,8 @@ Transformations:
   Tint1:
     func: tint
     params:
-      value: 70
-      mask: [127, 0, 127]
+      value: -25
+      mask: [0, 255, 0]
     en: False
   Tint2:
     func: tint_image
@@ -34,19 +34,18 @@ Transformations:
   Bright:
     func: bright
     params:
-      beta: 100
+      beta: 10
     en: False
   Contrast:
     func: contrast
     params:
-      alpha: 0.5
-    en: False
+      alpha: 1002.5
+    en: True
   Alpha_Beta:
     func: point_process
     params:
-      alpha: 1.0
-      beta: 0
-    en: False
+      alpha: 255.5
+    en: True
   Gamma:
     func: gamma
     params:
@@ -77,5 +76,17 @@ Transformations:
       iterations: 1
       transform_binary: True
     en: False
+  Translation:
+    func: translatioN
+    params:
+      x_pixels: 0.5
+      y_pixels: 25
+    en: False
+  Scale:
+    func: scale
+    params:
+      x_factor: 2
+      y_factor: 0.5
+    en: False
 Chain_Transformation:
-  [Gamma, Tint1, Hist_eq, Bright, LUT, Rotate1]
+  #[Gamma, Tint1, Hist_eq, Bright, LUT, Rotate1]

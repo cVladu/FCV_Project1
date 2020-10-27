@@ -20,7 +20,6 @@ FUNC_MAPPING = {
     'point': linear_point_processing,
     'gamma': gamma_correction,
     'gamma_correction': gamma_correction,
-    'LUT': lookup_table,
     'lut': lookup_table,
     'lookup': lookup_table,
     'lookup_table': lookup_table,
@@ -36,6 +35,11 @@ FUNC_MAPPING = {
     'opening': opening,
     'close': closing,
     'closing': closing,
+    'translate': translation,
+    'translation': translation,
+    'scale': scale,
+    'scaling': scale,
+
 }
 
 TEST = False

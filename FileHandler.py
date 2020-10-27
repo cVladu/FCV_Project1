@@ -43,7 +43,7 @@ def read_config_file(file_path, _type='.yaml'):
         chain_list = data['Chain_Transformation']
         for func_dict in augmentation_dict.values():
             try:
-                func_dict['func'] = FUNC_MAPPING[func_dict['func']]
+                func_dict['func'] = FUNC_MAPPING[func_dict['func'].lower()]
             except KeyError:
                 raise KeyError("{} function is not valid or it couldn't be found".format(func_dict['func']))
     else:
