@@ -133,8 +133,8 @@ in range [0, 255]
     
 ***Either lut or all blue green red parameters must be provided.***
 ### Histogram equalization
-Apply histogram equalization on the image
-**alias:** [equalize_hist, eq_hist, hist_eq, hist_equalization]
+Apply histogram equalization on the image  
+**alias:** [equalize_hist, eq_hist, hist_eq, hist_equalization]  
 **params:**
 * convert_to_gray:
     - **Optional.** Default True
