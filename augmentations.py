@@ -186,9 +186,9 @@ def closing(image, iterations, kernel=None, kernel_type=None, kernel_size=None, 
 
 
 def translation(image, x_pixels, y_pixels):
-    if x_pixels < 1.:
+    if -1. < x_pixels < 1.:
         x_pixels = image.shape[0] * x_pixels
-    if y_pixels < 1.:
+    if -1. < y_pixels < 1.:
         y_pixels = image.shape[1] * y_pixels
     result = cv2.warpAffine(image, np.asarray([[1, 0, x_pixels], [0, 1, y_pixels]]), image.shape[1::-1])
     return result
