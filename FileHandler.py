@@ -15,10 +15,11 @@ def read_config_file(file_path, _type='.yaml'):
             {'func': <name_of_the_function> # The name of the transformation to be applied.
              'params': <dict_of_params> # The dictionary of params to be passed to the function.
                                         # Must be in the form of <param> : <value>
-             'en': <bool>  # Specify if the transformation shall be applied as a standalone. It can miss. In this case, the default is True
+             'en': <bool>  # Specify if the transformation shall be applied as a standalone. It can miss. In this case,
+             the default is True
         }
-                chain_list - a list containing all the transformation that need to be applied as a chain. The transformation
-                are given as a name in the already defined augmentation_list
+                chain_list - a list containing all the transformation that need to be applied as a chain. The
+                transformation are given as a name in the already defined augmentation_list
     :raises: NotImplementedError in case the chosen file type is not yaml
     """
     if _type == '.txt':
@@ -29,6 +30,7 @@ def read_config_file(file_path, _type='.yaml'):
                 line_split = line.split(' ')
                 param_dict = {}
                 func = CONFIG_DICT[line_split[0]]['func']
+                # noinspection PyPep8Naming
                 PARAM_DICT = CONFIG_DICT[line_split[0]]
                 for index, param in enumerate(line_split[1:]):
                     dtype_ = PARAM_DICT['params'][index]['dtype']

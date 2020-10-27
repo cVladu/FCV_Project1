@@ -200,16 +200,6 @@ def scale(image, x_factor, y_factor):
     return result
 
 
-def dummy_func(image, *args, **kwargs):
-    """
-    Dummy function
-    :param image: Input image
-    :param args: ...
-    :return: ...
-    """
-    return image
-
-
 def apply_function(image, func, **kwargs):
     """
     Apply a transformation to the image

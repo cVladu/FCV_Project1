@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-import traceback
 from main import run_main
 
 
@@ -16,6 +15,7 @@ def show_error(*args):
 
 
 def create_handle_browse(button_type, label):
+    # noinspection PyUnusedLocal
     def handle_browse(event=None):
         if button_type == 'input':
             global dir_path_inp
@@ -37,6 +37,7 @@ def create_handle_browse(button_type, label):
 
 def create_run_command(window_to_destroy, entry, recursive_check):
 
+    # noinspection PyUnusedLocal
     def run_command(event=None):
         run_main(dir_path_inp,
                  dir_path_out,

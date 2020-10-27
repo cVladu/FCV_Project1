@@ -6,7 +6,7 @@ dependencies:
   - _libgcc_mutex=0.1=main
   - blas=1.0=mkl
   - bzip2=1.0.8=h7b6447c_0
-  - ca-certificates=2020.7.22=0
+  - ca-certificates=2020.10.14=0
   - cairo=1.14.12=h8948797_3
   - certifi=2018.8.24=py35_1
   - cycler=0.10.0=py35hc4d5149_0
@@ -61,6 +61,7 @@ dependencies:
   - python=3.5.6=hc3d631a_0
   - python-dateutil=2.8.1=py_0
   - pytz=2020.1=py_0
+  - pyyaml=3.13=py35h14c3975_0
   - qt=5.9.6=h8703b6f_2
   - readline=7.0=h7b6447c_5
   - setuptools=40.2.0=py35_0
@@ -73,6 +74,7 @@ dependencies:
   - tornado=5.1.1=py35h7b6447c_0
   - wheel=0.35.1=py_0
   - xz=5.2.5=h7b6447c_0
+  - yaml=0.1.7=h96e3832_1
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.5=h9ceee32_0
 prefix: /home/catalin/anaconda3/envs/FCV
