@@ -1,5 +1,5 @@
 name: backport-testing
-on: 
+on:
   push:
     branches:
       - testing
@@ -17,14 +17,13 @@ jobs:
         uses: mtanzi/action-automerge@v1
         id: backport-release
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source: 'testing'
           target: '${{ matrix.active-releases }}'
-      - name: Merge testing into active master branch 
+      - name: Merge testing into active master branch
         uses: mtanzi/action-automerge@v1
         id: backport-master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source: 'testing'
           target: 'master'
-
