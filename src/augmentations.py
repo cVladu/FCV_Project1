@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+import os
+from functools import partial
+
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from functools import partial
-import os
 
 
 def _get_kernel(kernel=None, kernel_type=None, kernel_size=None):
@@ -13,20 +15,34 @@ def _get_kernel(kernel=None, kernel_type=None, kernel_size=None):
             raise Exception("kernel must be of type list")
     elif not kernel and kernel_type and kernel_size:
         rec_list = ["RECT", "RECTANGLE", "MORPH_RECT", "MORPH RECT"]
-        ellipse_list = ["ELLIPSE", "ELL", "EL", "MORPH_ELLIPSE", "MORPH ELLIPSE"]
+        ellipse_list = [
+            "ELLIPSE",
+            "ELL",
+            "EL",
+            "MORPH_ELLIPSE",
+            "MORPH ELLIPSE",
+        ]  # noqa: E501
         cross_list = ["CROSS", "+", "MORPH_CROSS", "MORPH CROSS"]
         if kernel_type.upper() in rec_list:
-            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, tuple(kernel_size))
+            kernel = cv2.getStructuringElement(
+                cv2.MORPH_RECT, tuple(kernel_size)
+            )  # noqa: E501
         elif kernel_type.upper() in ellipse_list:
-            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, tuple(kernel_size))
+            kernel = cv2.getStructuringElement(
+                cv2.MORPH_ELLIPSE, tuple(kernel_size)
+            )  # noqa: E501
         elif kernel_type.upper() in cross_list:
-            kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, tuple(kernel_size))
+            kernel = cv2.getStructuringElement(
+                cv2.MORPH_CROSS, tuple(kernel_size)
+            )  # noqa: E501
         else:
-            raise Exception("kernel_type can onl be any of the following: {} or {} or {}".format(
-                rec_list, ellipse_list, cross_list
-            ))
+            raise Exception(
+                f"kernel_type can onl be any of the following: {rec_list} or {ellipse_list} or {cross_list}"  # noqa: E501
+            )
     else:
-        raise Exception("Either kernel or kernel_type and kernel_size must be given.")
+        raise Exception(
+            "Either kernel or kernel_type and kernel_size must be given."
+        )  # noqa: E501
     return kernel
 
 
@@ -43,10 +59,12 @@ def rotate_image(image, angle):
     :param angle: The angle, in degrees
     :return: Rotated image in same format as the input image
     """
-    image = image.astype('uint8')
+    image = image.astype("uint8")
     image_center = tuple(np.array(image.shape[1::-1]) / 2)
     rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-    result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+    result = cv2.warpAffine(
+        image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR
+    )  # noqa: E501
     return result
 
 
@@ -54,16 +72,22 @@ def tint_image(image, value, channel=None, mask=None):
     result = np.empty(image.shape, dtype=image.dtype)
     img_mask = np.zeros(image.shape, dtype=image.dtype)
     if channel and not mask:
-        channel_index = 0 if channel == 'blue' else 1 if channel == 'green' else 2 if channel == 'red' else None
+        channel_index = (
+            0
+            if channel == "blue"
+            else 1 if channel == "green" else 2 if channel == "red" else None
+        )
         if not channel_index:
-            raise Exception("Valid options for channel are: (blue, green, red)")
+            raise Exception(
+                "Valid options for channel are: (blue, green, red)"
+            )  # noqa: E501
         img_mask[:, :, channel_index] = _get_min_max(image)[1]
     elif mask and not channel:
         img_mask[:, :] = mask
     else:
         raise Exception("Either channel or mask must be given.")
-    beta = value/100. if value > 1 else value
-    alpha = 1. - beta
+    beta = value / 100.0 if value > 1 else value
+    alpha = 1.0 - beta
     if alpha < 0 or alpha > 1:
         raise Exception("For tint_image, value must be between 0 and 100.")
     cv2.addWeighted(image, alpha, img_mask, beta, 0.0, result)
@@ -71,25 +95,37 @@ def tint_image(image, value, channel=None, mask=None):
 
 
 def hist(image, img_type="bgr"):
-    calc_hist = partial(cv2.calcHist, images=[image], mask=None, histSize=[256], ranges=[0, 256])
-    channel_color = zip([0, 1, 2], ('b', 'g', 'r')) if img_type.lower() == 'bgr' \
-        else zip([0], ['k']) if img_type.lower() == 'gray' \
-        else None
+    calc_hist = partial(
+        cv2.calcHist,
+        images=[image],
+        mask=None,
+        histSize=[256],
+        ranges=[0, 256],  # noqa: E501
+    )
+    channel_color = (
+        zip([0, 1, 2], ("b", "g", "r"))
+        if img_type.lower() == "bgr"
+        else zip([0], ["k"]) if img_type.lower() == "gray" else None
+    )
     if not channel_color:
-        raise Exception("Argument img_type does not accept value {} for function hist".format(img_type))
+        raise Exception(
+            f"Argument img_type does not accept value {img_type} for function hist"  # noqa: E501
+        )
     for channel, color in channel_color:
         hist_ = calc_hist(channels=[channel])
         plt.plot(hist_, color=color)
-    plt.savefig('tmp.png')
-    result = cv2.imread('tmp.png')
-    os.remove('tmp.png')
+    plt.savefig("tmp.png")
+    result = cv2.imread("tmp.png")
+    os.remove("tmp.png")
     plt.clf()
     return result
 
 
 def increase_brightness(image, beta):
     if beta < 0:
-        raise Exception("For function increase_brightness, beta must be higher than 0.")
+        raise Exception(
+            "For function increase_brightness, beta must be higher than 0."
+        )  # noqa: E501
     result = linear_point_processing(image, beta=beta)
     return result
 
@@ -103,8 +139,12 @@ def modify_contrast(image, alpha):
 
 def linear_point_processing(image, alpha=1, beta=0):
     min_value, max_value = _get_min_max(image)
-    table = np.array([i * alpha + beta if i * alpha + beta < max_value else max_value
-                      for i in np.arange(min_value, max_value + 1)]).astype(image.dtype)
+    table = np.array(
+        [
+            i * alpha + beta if i * alpha + beta < max_value else max_value
+            for i in np.arange(min_value, max_value + 1)
+        ]
+    ).astype(image.dtype)
     result = cv2.LUT(image, table)
     return result
 
@@ -112,10 +152,16 @@ def linear_point_processing(image, alpha=1, beta=0):
 def gamma_correction(image, gamma):
     min_value, max_value = _get_min_max(image)
     if gamma <= 0:
-        raise Exception("For function gamma_correction, gamma must be higher than 0")
-    inv_gamma = 1. / gamma
-    table = np.array([((i / float(max_value)) ** inv_gamma) * max_value
-                      for i in np.arange(min_value, max_value+1)]).astype(image.dtype)
+        raise Exception(
+            "For function gamma_correction, gamma must be higher than 0"
+        )  # noqa: E501
+    inv_gamma = 1.0 / gamma
+    table = np.array(
+        [
+            ((i / float(max_value)) ** inv_gamma) * max_value
+            for i in np.arange(min_value, max_value + 1)
+        ]
+    ).astype(image.dtype)
     result = cv2.LUT(image, table)
     return result
 
@@ -129,10 +175,14 @@ def lookup_table(image, lut=None, blue=None, green=None, red=None):
         blue, green, red = np.array(blue), np.array(green), np.array(red)
         lut = np.dstack((blue, green, red))
         if lut.shape != (1, 256, 3):
-            raise Exception("Provide a lookup table of 256 entries for each channel")
+            raise Exception(
+                "Provide a lookup table of 256 entries for each channel"
+            )  # noqa: E501
     else:
-        raise Exception("Either lut or all blue, green, red parameters must be given.")
-    image = image.astype('uint8')
+        raise Exception(
+            "Either lut or all blue, green, red parameters must be given."
+        )  # noqa: E501
+    image = image.astype("uint8")
     result = cv2.LUT(image, lut)
     return result
 
@@ -153,55 +203,114 @@ def hist_equalization(image, convert_to_gray=True, apply_to_rgb=False):
     return result
 
 
-def dilation(image, iterations, kernel=None, kernel_type=None, kernel_size=None, transform_binary=False):
+def dilation(
+    image,
+    iterations,
+    kernel=None,
+    kernel_type=None,
+    kernel_size=None,
+    transform_binary=False,
+):
     kernel = _get_kernel(kernel, kernel_type, kernel_size)
     if transform_binary:
-        _, image = cv2.threshold(cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
+        _, image = cv2.threshold(
+            cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY),
+            127,
+            255,
+            cv2.THRESH_BINARY,  # noqa: E501
+        )
     result = cv2.dilate(image, kernel, iterations=iterations)
     return result
 
 
-def erosion(image, iterations, kernel=None, kernel_type=None, kernel_size=None, transform_binary=False):
+def erosion(
+    image,
+    iterations,
+    kernel=None,
+    kernel_type=None,
+    kernel_size=None,
+    transform_binary=False,
+):
     kernel = _get_kernel(kernel, kernel_type, kernel_size)
     if transform_binary:
-        _, image = cv2.threshold(cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
+        _, image = cv2.threshold(
+            cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY),
+            127,
+            255,
+            cv2.THRESH_BINARY,  # noqa: E501
+        )
     result = cv2.erode(image, kernel, iterations=iterations)
     return result
 
 
-def opening(image, iterations, kernel=None, kernel_type=None, kernel_size=None, transform_binary=False):
+def opening(
+    image,
+    iterations,
+    kernel=None,
+    kernel_type=None,
+    kernel_size=None,
+    transform_binary=False,
+):
     kernel = _get_kernel(kernel, kernel_type, kernel_size)
     if transform_binary:
-        _, image = cv2.threshold(cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
-    result = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=iterations)
+        _, image = cv2.threshold(
+            cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY),
+            127,
+            255,
+            cv2.THRESH_BINARY,  # noqa: E501
+        )
+    result = cv2.morphologyEx(
+        image, cv2.MORPH_OPEN, kernel, iterations=iterations
+    )  # noqa: E501
     return result
 
 
-def closing(image, iterations, kernel=None, kernel_type=None, kernel_size=None, transform_binary=False):
+def closing(
+    image,
+    iterations,
+    kernel=None,
+    kernel_type=None,
+    kernel_size=None,
+    transform_binary=False,
+):
     kernel = _get_kernel(kernel, kernel_type, kernel_size)
     if transform_binary:
-        _, image = cv2.threshold(cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
-    result = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel, iterations=iterations)
+        _, image = cv2.threshold(
+            cv2.cvtColor(image, code=cv2.COLOR_BGR2GRAY),
+            127,
+            255,
+            cv2.THRESH_BINARY,  # noqa: E501
+        )
+    result = cv2.morphologyEx(
+        image, cv2.MORPH_CLOSE, kernel, iterations=iterations
+    )  # noqa: E501
     return result
 
 
 def translation(image, x_pixels, y_pixels):
-    if -1. < x_pixels < 1.:
+    if -1.0 < x_pixels < 1.0:
         x_pixels = image.shape[0] * x_pixels
-    if -1. < y_pixels < 1.:
+    if -1.0 < y_pixels < 1.0:
         y_pixels = image.shape[1] * y_pixels
-    result = cv2.warpAffine(image, np.asarray([[1, 0, x_pixels], [0, 1, y_pixels]]), image.shape[1::-1])
+    result = cv2.warpAffine(
+        image,
+        np.asarray([[1, 0, x_pixels], [0, 1, y_pixels]]),
+        image.shape[1::-1],  # noqa: E501
+    )
     return result
 
 
 def scale(image, x_factor, y_factor):
-    result = cv2.warpAffine(image, np.asarray([[x_factor, 0, 0], [0, y_factor, 0]]),
-                            (int(image.shape[1] * x_factor), int(image.shape[0] * y_factor)))
+    result = cv2.warpAffine(
+        image,
+        np.asarray([[x_factor, 0, 0], [0, y_factor, 0]]),
+        (int(image.shape[1] * x_factor), int(image.shape[0] * y_factor)),
+    )
     return result
 
 
 def apply_function(image, func, **kwargs):
-    """
+    """# noqa: E501
     Apply a transformation to the image
     :param image: The input image. The transformation / augmentation is applied to this image
     :param func: The transformation / augmentation to apply
@@ -214,5 +323,5 @@ def apply_function(image, func, **kwargs):
 def apply_chain(image, funcs, func_dicts):
     for func in funcs:
         func_dict = func_dicts[func]
-        image = apply_function(image, func_dict['func'], **func_dict['params'])
+        image = apply_function(image, func_dict["func"], **func_dict["params"])
     return image
