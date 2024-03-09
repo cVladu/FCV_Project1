@@ -38,9 +38,10 @@ def read_config_file(file_path, _type='.yaml'):
                 augmentation_list.append({'func': func, 'params': param_dict, 'str_format': line_split[0]})
     elif _type == '.yaml' or _type == '.yml':
         import yaml
+        from yaml import Loader
         from CONFIG import FUNC_MAPPING
         with open(file_path) as yaml_f:
-            data = yaml.load(yaml_f)
+            data = yaml.load(yaml_f, Loader)
         augmentation_dict = data['Transformations']
         chain_list = data['Chain_Transformation']
         for func_dict in augmentation_dict.values():
