@@ -1,0 +1,30 @@
+name: backport-testing
+on: 
+  push:
+    branches:
+      - testing
+jobs:
+  backport-tests:
+    name: Backport all tests to active releases
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        active-releases: [ 'release/0.2' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Merge testing into active release branches
+        uses: mtanzi/action-automerge@v1
+        id: backport-release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          source: 'testing'
+          target: '${{ matrix.active-releases }}'
+      - name: Merge testing into active master branch 
+        uses: mtanzi/action-automerge@v1
+        id: backport-release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          source: 'testing'
+          target: 'master'
+
