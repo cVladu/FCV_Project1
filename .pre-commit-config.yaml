@@ -6,7 +6,6 @@ repos:
     - id: check-builtin-literals
     - id: check-docstring-first
     - id: debug-statements
-    - id: double-quote-string-fixer
     - id: fix-encoding-pragma
     - id: check-case-conflict
     - id: destroyed-symlinks
