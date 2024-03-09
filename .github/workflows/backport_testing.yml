@@ -12,7 +12,7 @@ jobs:
         active-releases: [ 'release/0.2' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Merge testing into active release branches
         uses: mtanzi/action-automerge@v1
         id: backport-release
